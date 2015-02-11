@@ -9,3 +9,6 @@
 ###Auto dependencies 
 * install.package("packageName")
 * install.package(c("one", "two", "three"))
+
+##Load a package
+library("packageName")
