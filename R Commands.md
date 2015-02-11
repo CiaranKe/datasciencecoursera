@@ -11,4 +11,11 @@
 * install.package(c("one", "two", "three"))
 
 ##Load a package
-library("packageName")
+library(packageName)
+search() #lists functions
+
+##Rtools
+http://cran.r-project.org/bin/windows/Rtools/
+
+
+find.package()
