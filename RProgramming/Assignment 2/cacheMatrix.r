@@ -1,32 +1,52 @@
+##  makeCacheMatrix
+#
+#   Creates an "object" for a (square!) matrix to prepare for caching its inverse
+#   containing a getter and setter (returning the value set) 
+#   for the matrix and its inverse
+
+
+##  makeCacheMatrix
+#
+#   Wrapper for a Matrix object that provides gettter and setter functions
+#   for the matrix and its inverse.  Stores a cache of the last inverse value. 
+
 makeCacheMatrix <- function(cacheMatrix = matrix()) {
-        cacheMatrixMean <- NULL
+        cacheMatrixInverse <- NULL # create the cache for the inverse
         set <- function(newMatrix) {
-                cacheMatrix <<- newMatrix
-                cacheMatrixMean <<- NULL
+                cacheMatrix <<- newMatrix #set the matrix object
+                cacheMatrixInverse <<- NULL #destroy the last cache
         }
-        get <- function() cacheMatrix
-        setmean <- function(newCacheMatrixMean) cacheMatrixMean 
-                                <<- newCacheMatrixMean
-        getmean <- function() cacheMatrixMean
-        
+        get <- function() {
+                cacheMatrix #Return the matrix
+        }
+        setInverse <- function(newcacheMatrixInverse) {
+                cacheMatrixInverse <<- newcacheMatrixInverse
+        }
+        getInverse <- function(){ 
+                cacheMatrixInverse #possibly NULL!
+        }
+        #allows var$get(), var$set(x), etc...
         list(set = set, get = get,
-             setmean = setmean,
-             getmean = getmean)
+             setInverse = setInverse,
+             getInverse = getInverse)
 }
 
+## cacheSolve
+# 
+# Calclutes the inverse of a given CacheMatrix or returns the cached 
+# value, if found.
 
-cacheSolve <- function() {
-        
-}
-
-cachemean <- function(x, ...) {
-        m <- x$getmean()
-        if(!is.null(m)) {
-                message("getting cached data")
-                return(m)
+cacheSolve <- function(matrixToSolve, ...) {
+        inverse <- matrixToSolve$getInverse() #get the cached value
+        if(!is.null(inverse)) { #recalcuate
+                message("Using cached value")
+                return(inverse)
         }
-        data <- x$get()
-        m <- mean(data, ...)
-        x$setmean(m)
-        m
+        else { #alert the user we're using the cached value.
+                message("calculating value")
+        }
+        #store the value and return.
+        inverse <- solve(matrixToSolve$get(), ...)
+        matrixToSolve$setInverse(inverse)
+        return(inverse)
 }
